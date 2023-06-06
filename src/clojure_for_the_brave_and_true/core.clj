@@ -65,3 +65,7 @@
       (if (> accumulated-size target)
         part
         (recur remaining (+ accumulated-size (:size (first remaining))))))))
+
+(defn mapset
+  [f source-vec]
+  (set (map f source-vec)))
