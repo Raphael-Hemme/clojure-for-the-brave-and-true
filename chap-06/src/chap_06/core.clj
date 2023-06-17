@@ -1,6 +1,7 @@
 (ns chap-06.core
-  (:require [chap-06.visualization.svg :as svg])
-  (refer 'chap-06.visualization.svg))
+  (:require [clojure.java.browse :as browse]
+            [chap-06.visualization.svg :refer [xml]])
+  (:gen-class))
 
 
 (def heist [{:location "Cologne, Germany"
@@ -25,6 +26,23 @@
              :lng 12.45}
             ])
 
-(defn -main 
-  [& args] 
-  (println (points heist)))
+(defn url
+  [filename]
+  (str "file:///"
+       (System/getProperty "user.dir")
+       "/"
+       filename))
+
+(defn template
+  [contents]
+  (str "<style>polyline { fill:none; stroke:#5881d8; stroke-width:3}</style>"
+       contents))
+
+(defn -main
+  [& args]
+  (let [filename "map.html"]
+    (->> heist
+         (xml 50 100)
+         template
+         (spit filename))
+    (browse/browse-url (url filename))))

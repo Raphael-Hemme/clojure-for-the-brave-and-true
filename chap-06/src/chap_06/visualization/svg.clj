@@ -44,7 +44,7 @@
   (->> locations
        translate-to-00(scale width height)))
 
-(defn xml-seq
+(defn xml
   "svg 'template', which also flips the coordinate system"
   [width height locations]
   (str "<svg height=\"" height "\" width=\"" width "\">"
