@@ -1,6 +1,6 @@
-(ns chap-06.core)
-(require '[chap-06.visualization.svg :as svg])
-(refer 'chap-06.visualization.svg)
+(ns chap-06.core
+  (:require [chap-06.visualization.svg :as svg])
+  (refer 'chap-06.visualization.svg))
 
 
 (def heist [{:location "Cologne, Germany"
@@ -26,5 +26,5 @@
             ])
 
 (defn -main 
-  [& args]
-  (println (svg/points heist)))
+  [& args] 
+  (println (points heist)))
