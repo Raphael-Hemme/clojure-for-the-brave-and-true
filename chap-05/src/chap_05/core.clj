@@ -58,7 +58,27 @@
             [[pos destination] [destination pos]])
     board))
 
+(defn connect-right
+  [board max-pos pos]
+  (let [neighbor (inc pos)
+        destination (inc neighbor)]
+    (if-not (or (triangular? neighbor) (triangular? pos))
+      (connect board max-pos pos neighbor destination)
+      board)))
 
+(defn connect-down-left
+  [board max-pos pos]
+  (let [row (row-num pos)
+        neighbor (+ row pos)
+        destination (+ row neighbor)]
+    (connect board max-pos pos neighbor destination)))
+
+(defn connect-down-right
+  [board max-pos pos]
+  (let [row (row-num pos)
+        neighbor (+ 1 row pos)
+        destination (+ 2 row neighbor)]
+    (connect board max-pos pos neighbor destination)))
 
 (defn -main
   "I don't do a whole lot ... yet."
