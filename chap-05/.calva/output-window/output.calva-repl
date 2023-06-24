@@ -108,3 +108,5 @@ clj꞉chap-05.core꞉> 
 clj꞉chap-05.core꞉> 
 {}
 clj꞉chap-05.core꞉> 
+#'chap-05.core/add-pos
+clj꞉chap-05.core꞉> 

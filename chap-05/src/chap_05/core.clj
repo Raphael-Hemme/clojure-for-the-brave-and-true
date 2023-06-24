@@ -130,9 +130,22 @@
                        (pegged? board jumped)))
                 (get-in board [pos :connections]))))
 
+(defn valid-move?
+  "Return jumped position if the move from p1 to p2 is valid, otherwise nil"
+  [board p1 p2]
+  (get (valid-moves board p1) p2))
+
+(defn make-move
+  "Move peg from p1 to p2, removing the jumped peg"
+  [board p1 p2]
+  (if-let [jumped (valid-move? board p1 p2)]
+    (move-peg (remove-peg board jumped) p1 p2)))
 
 
-;; trying it out - not working as expected at the moment.
+
+
+
+;; trying it out - fixed now.
 (def my-board (assoc-in (new-board 5) [4 :pegged] false))
 
 (println my-board)
