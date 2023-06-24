@@ -70,7 +70,7 @@
   [board max-pos pos]
   (let [row (row-num pos)
         neighbor (+ row pos)
-        destination (+ row neighbor)]
+        destination (+ 1 row neighbor)]
     (connect board max-pos pos neighbor destination)))
 
 (defn connect-down-right
@@ -86,7 +86,8 @@
   (let [pegged-board (assoc-in board [pos :pegged] true)]
     (reduce (fn [new-board connection-creation-fn]
               (connection-creation-fn new-board max-pos pos))
-            pegged-board[connect-right connect-down-left connect-down-right])))
+            pegged-board
+            [connect-right connect-down-left connect-down-right])))
 
 (defn new-board
   "Creates a new board with the given number of rows"
@@ -119,6 +120,24 @@
   "Take peg out of p1 and place it in p2"
   [board p1 p2]
   (place-peg (remove-peg board p1) p2))
+
+(defn valid-moves
+  "Return a map of all valid moves for pos, where the ky is the destination and the value is the jumped position"
+  [board pos]
+  (into {}
+        (filter (fn [[destination jumped]]
+                  (and (not (pegged? board destination))
+                       (pegged? board jumped)))
+                (get-in board [pos :connections]))))
+
+
+
+;; trying it out - not working as expected at the moment.
+(def my-board (assoc-in (new-board 5) [4 :pegged] false))
+
+(println my-board)
+
+(valid-moves my-board 5)
 
 (defn -main
   "I don't do a whole lot ... yet."
