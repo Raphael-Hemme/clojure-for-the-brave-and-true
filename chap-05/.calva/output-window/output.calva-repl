@@ -110,3 +110,25 @@ clj꞉chap-05.core꞉> 
 clj꞉chap-05.core꞉> 
 #'chap-05.core/add-pos
 clj꞉chap-05.core꞉> 
+#'chap-05.core/alpha-start
+clj꞉chap-05.core꞉> 
+#'chap-05.core/alpha-end
+clj꞉chap-05.core꞉> 
+#'chap-05.core/letters
+clj꞉chap-05.core꞉> 
+#'chap-05.core/pos-chars
+clj꞉chap-05.core꞉> 
+#'chap-05.core/can-move?
+clj꞉chap-05.core꞉> 
+#'chap-05.core/alpha-start
+clj꞉chap-05.core꞉> 
+; Syntax error compiling at (src/chap_05/core.clj:161:10).
+; Unable to resolve symbol: colorize in this context
+clj꞉chap-05.core꞉> 
+#'chap-05.core/row-positions
+clj꞉chap-05.core꞉> 
+#'chap-05.core/row-padding
+clj꞉chap-05.core꞉> 
+; Syntax error (ClassNotFoundException) compiling at (src/chap_05/core.clj:178:8).
+; clujure.string
+clj꞉chap-05.core꞉> 

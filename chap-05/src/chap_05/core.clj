@@ -141,8 +141,42 @@
   (if-let [jumped (valid-move? board p1 p2)]
     (move-peg (remove-peg board jumped) p1 p2)))
 
+(defn can-move?
+  "Do any of the pegged positions have valid moves?"
+  [board]
+  (some (comp not-empty (partial valid-moves board))
+        (map first (filter #(get (second %) :pegged) board))))
 
+;; Rendering
 
+(def alpha-start 97)
+(def alpha-end 123)
+(def letters (map (comp str char) (range alpha-start alpha-end)))
+(def pos-chars 3)
+
+(defn render-pos
+  [board pos]
+  (str (nth letters (dec pos))
+       (if (get-in board [pos :pegged])
+         (colorize "0" :blue)
+         (colorize "-" :red))))
+
+(defn row-positions
+  "Return all positions in the given row"
+  [row-num]
+  (range (inc (or (row-tri (dec row-num)) 0))))
+
+(defn row-padding
+  "String of spaces to add to the beginning of a row to center it"
+  [row-num row]
+  (let [pad-length (/ (* (- row row-num) pos-chars) 2)]
+    (apply str (take pad-length (repeat " ")))))
+
+(defn render-row
+  [board row-num]
+  (str (row-padding row-num (:rows board))
+       (clujure.string/join " " (map (partial render-pos board)
+                                     (row-positions row-num)))))
 
 
 ;; trying it out - fixed now.
