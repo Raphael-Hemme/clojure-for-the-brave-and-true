@@ -179,6 +179,28 @@
                                      (row-positions row-num)))))
 
 
+;; HAndeling user input
+(defn letter->pos
+  "Converts the string representation of the UI to the corresponding position number"
+  [letter]
+  (inc (- (int (first letter)) alpha-start)))
+
+(defn get-input
+  "Waits for user to enter text and hit enter, then cleans the input"
+  ([] (get-input nil))
+  ([default]
+   (let [input (clojure.string/trim (read-line))]
+     (if (empty? input)
+       default
+       (clojure.string/lower-case input)))))
+
+
+(defn characters-as-strings
+  "The function missing in the book... Takes a simple string and removes spaces 
+   then returns a list of the individual characters"
+  [input-str] 
+  (apply list (clojure.string/split (clojure.string/replace input-str " " "") #"")))
+
 ;; trying it out - fixed now.
 (def my-board (assoc-in (new-board 5) [4 :pegged] false))
 

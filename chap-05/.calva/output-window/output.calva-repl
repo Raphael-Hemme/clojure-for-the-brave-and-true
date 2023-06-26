@@ -131,4 +131,38 @@ clj꞉chap-05.core꞉> 
 clj꞉chap-05.core꞉> 
 ; Syntax error (ClassNotFoundException) compiling at (src/chap_05/core.clj:178:8).
 ; clujure.string
+clj꞉chap-05.core꞉> (characters-as-strings "a    b")
+; Syntax error compiling at (.calva/output-window/output.calva-repl:134:20).
+; Unable to resolve symbol: characters-as-strings in this context
+clj꞉chap-05.core꞉> 
+#'chap-05.core/characters-as-strings
+clj꞉chap-05.core꞉> (characters-as-strings "a    b")
+("ab")
+clj꞉chap-05.core꞉> 
+#'chap-05.core/characters-as-strings
+clj꞉chap-05.core꞉> (characters-as-strings "a    b")
+; Execution error (ClassCastException) at chap-05.core/characters-as-strings (form-init13526142660910541341.clj:202).
+; class java.lang.String cannot be cast to class java.util.regex.Pattern (java.lang.String and java.util.regex.Pattern are in module java.base of loader 'bootstrap')
+clj꞉chap-05.core꞉> 
+#'chap-05.core/characters-as-strings
+clj꞉chap-05.core꞉> (characters-as-strings "a    b")
+(["a" "b"])
+clj꞉chap-05.core꞉> 
+(characters-as-strings "a   en    b")
+(["a" "e" "n" "b"])
+clj꞉chap-05.core꞉> 
+#'chap-05.core/characters-as-strings
+clj꞉chap-05.core꞉> 
+(characters-as-strings "a    b")
+(\a \space \space \space \space \b)
+clj꞉chap-05.core꞉> 
+#'chap-05.core/characters-as-strings
+clj꞉chap-05.core꞉> (characters-as-strings "a    b")
+["a" "b"]
+clj꞉chap-05.core꞉> 
+#'chap-05.core/characters-as-strings
+clj꞉chap-05.core꞉> (characters-as-strings "a    b")
+("a" "b")
+clj꞉chap-05.core꞉> (characters-as-strings "a    ngsdkj sks kl b")
+("a" "n" "g" "s" "d" "k" "j" "s" "k" "s" "k" "l" "b")
 clj꞉chap-05.core꞉> 
