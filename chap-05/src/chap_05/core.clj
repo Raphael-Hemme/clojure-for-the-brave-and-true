@@ -178,8 +178,13 @@
        (clujure.string/join " " (map (partial render-pos board)
                                      (row-positions row-num)))))
 
+(defn print-board
+  [board]
+  (doseq [row-num (range 1 (inc (:rows board)))]
+    (println (render-row board row-num))))
 
-;; HAndeling user input
+
+;; Handeling user input
 (defn letter->pos
   "Converts the string representation of the UI to the corresponding position number"
   [letter]
@@ -196,10 +201,69 @@
 
 
 (defn characters-as-strings
-  "The function missing in the book... Takes a simple string and removes spaces 
+  "The function missing in the book... Takes a simple string, removes spaces 
    then returns a list of the individual characters"
   [input-str] 
   (apply list (clojure.string/split (clojure.string/replace input-str " " "") #"")))
+
+
+(defn prompt-empty-peg
+  [board]
+  (println "Here's your board:")
+  (print-board board)
+  (println "Remove which peg? [e]")
+  (prompt-move (remove-peg board (letter->pos (get-input "e")))))
+
+(defn prompt-rows
+  []
+  (println "How many rows? [5]")
+  (let [rows (Integer. (get-input 5))
+        board (new-board rows)]
+    (prompt-empty-peg board)))
+
+
+(defn game-over
+  "Announce the game is over and prompt to play again"
+  [board]
+  (let [remaining-pegs (count (filter :pegged (vals board)))]
+    (println "Game over! You had" remaining-pegs "pegs left:")
+    (print-board board)
+    (println "Play again? y/n [y]")
+    (let [input (get-input "y")]
+      (if (= "y" input)
+        (prompt-rows)
+        (do
+          (println "Bye!")
+           (System/exit 0))))))
+
+
+
+(defn user-entered-invalid-move
+  "Handles the next step after a user has entered an invalid move"
+  [board]
+  (println "\n!!! That was an invalid move :(\n")
+  (prompt-move board))
+
+(defn user-entered-valid-move
+  "Handles the next step after a user has entered a valid move"
+  [board]
+  (if (can-move? board)
+    (prompt-move board)
+    (game-over board)))
+
+
+(defn prompt-move
+  [board]
+  (println "\nHere's your board:")
+  (print-board board)
+  (println "Move from where to where? Enter two letter:")
+  (let [input (map letter->pos (characters-as-strings (get-input)))]
+    (if-let [new-board (make-move board (first input) (second input))]
+      (user-entered-valid-move new-board)
+      (user-entered-invalid-move board))))
+
+
+
 
 ;; trying it out - fixed now.
 (def my-board (assoc-in (new-board 5) [4 :pegged] false))
