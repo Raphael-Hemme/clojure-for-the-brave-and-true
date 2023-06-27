@@ -1,8 +1,9 @@
 (ns chap-05.core
-  (rquire [clojure.set :as set])
+  (:require [clojure.set :as set])
+  (:require [clojure.string :as s])
   (:gen-class))
 
-(declare successful-move prompt-move game-over query-rows)
+(declare successful-move prompt-move game-over prompt-rows)
 
 (def board-structure
   {1 {:pegged true, :connections {6 3, 4 2}},
@@ -148,18 +149,33 @@
         (map first (filter #(get (second %) :pegged) board))))
 
 ;; Rendering
-
 (def alpha-start 97)
 (def alpha-end 123)
 (def letters (map (comp str char) (range alpha-start alpha-end)))
 (def pos-chars 3)
 
+(def ansi-styles
+  {:red   "[31m"
+   :green "[32m"
+   :blue  "[34m"
+   :reset "[0m"})
+
+(defn ansi
+  "Produce a string which will apply an ansi style"
+  [style]
+  (str \u001b (style ansi-styles)))
+
+(defn colorize
+  "Apply ansi color to text"
+  [text color]
+  (str (ansi color) text (ansi :reset)))
+
 (defn render-pos
   [board pos]
   (str (nth letters (dec pos))
        (if (get-in board [pos :pegged])
-         "0"
-         "-")))
+         (colorize "0" :blue)
+         (colorize "-" :red))))
 
 (defn row-positions
   "Return all positions in the given row"
@@ -175,7 +191,7 @@
 (defn render-row
   [board row-num]
   (str (row-padding row-num (:rows board))
-       (clujure.string/join " " (map (partial render-pos board)
+       (s/join " " (map (partial render-pos board)
                                      (row-positions row-num)))))
 
 (defn print-board
@@ -194,17 +210,17 @@
   "Waits for user to enter text and hit enter, then cleans the input"
   ([] (get-input nil))
   ([default]
-   (let [input (clojure.string/trim (read-line))]
+   (let [input (s/trim (read-line))]
      (if (empty? input)
        default
-       (clojure.string/lower-case input)))))
+       (s/lower-case input)))))
 
 
 (defn characters-as-strings
   "The function missing in the book... Takes a simple string, removes spaces 
    then returns a list of the individual characters"
   [input-str] 
-  (apply list (clojure.string/split (clojure.string/replace input-str " " "") #"")))
+  (apply list (s/split (s/replace input-str " " "") #"")))
 
 
 (defn prompt-empty-peg
@@ -273,6 +289,5 @@
 (valid-moves my-board 5)
 
 (defn -main
-  "I don't do a whole lot ... yet."
   []
   (prompt-rows))

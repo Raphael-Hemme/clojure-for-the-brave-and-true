@@ -166,3 +166,96 @@ clj꞉chap-05.core꞉> (characters-as-strings "a    b")
 clj꞉chap-05.core꞉> (characters-as-strings "a    ngsdkj sks kl b")
 ("a" "n" "g" "s" "d" "k" "j" "s" "k" "s" "k" "l" "b")
 clj꞉chap-05.core꞉> 
+#'chap-05.core/query-rows
+clj꞉chap-05.core꞉> 
+#'chap-05.core/board-structure
+clj꞉chap-05.core꞉> 
+#'chap-05.core/tri*
+clj꞉chap-05.core꞉> 
+#'chap-05.core/tri
+clj꞉chap-05.core꞉> 
+#'chap-05.core/triangular?
+clj꞉chap-05.core꞉> 
+#'chap-05.core/row-tri
+clj꞉chap-05.core꞉> 
+#'chap-05.core/row-num
+clj꞉chap-05.core꞉> 
+#'chap-05.core/connect
+clj꞉chap-05.core꞉> 
+#'chap-05.core/connect-right
+clj꞉chap-05.core꞉> 
+#'chap-05.core/connect-down-left
+clj꞉chap-05.core꞉> 
+#'chap-05.core/connect-down-right
+clj꞉chap-05.core꞉> 
+#'chap-05.core/add-pos
+clj꞉chap-05.core꞉> 
+#'chap-05.core/new-board
+clj꞉chap-05.core꞉> 
+#'chap-05.core/pegged?
+clj꞉chap-05.core꞉> 
+#'chap-05.core/remove-peg
+clj꞉chap-05.core꞉> 
+#'chap-05.core/place-peg
+clj꞉chap-05.core꞉> 
+#'chap-05.core/move-peg
+clj꞉chap-05.core꞉> 
+#'chap-05.core/valid-moves
+clj꞉chap-05.core꞉> 
+#'chap-05.core/valid-move?
+clj꞉chap-05.core꞉> 
+#'chap-05.core/make-move
+clj꞉chap-05.core꞉> 
+#'chap-05.core/can-move?
+clj꞉chap-05.core꞉> 
+#'chap-05.core/alpha-end
+clj꞉chap-05.core꞉> 
+; Syntax error compiling at (src/chap_05/core.clj:161:10).
+; Unable to resolve symbol: colorize in this context
+clj꞉chap-05.core꞉> 
+#'chap-05.core/render-pos
+clj꞉chap-05.core꞉> 
+#'chap-05.core/row-positions
+clj꞉chap-05.core꞉> 
+#'chap-05.core/row-padding
+clj꞉chap-05.core꞉> 
+; Syntax error (ClassNotFoundException) compiling at (src/chap_05/core.clj:178:8).
+; clujure.string
+clj꞉chap-05.core꞉> 
+#'chap-05.core/print-board
+clj꞉chap-05.core꞉> 
+#'chap-05.core/letter->pos
+clj꞉chap-05.core꞉> 
+#'chap-05.core/get-input
+clj꞉chap-05.core꞉> 
+#'chap-05.core/characters-as-strings
+clj꞉chap-05.core꞉> 
+#'chap-05.core/prompt-empty-peg
+clj꞉chap-05.core꞉> 
+#'chap-05.core/prompt-rows
+clj꞉chap-05.core꞉> 
+#'chap-05.core/game-over
+clj꞉chap-05.core꞉> 
+#'chap-05.core/user-entered-invalid-move
+clj꞉chap-05.core꞉> 
+#'chap-05.core/user-entered-valid-move
+clj꞉chap-05.core꞉> 
+#'chap-05.core/prompt-move
+clj꞉chap-05.core꞉> 
+#'chap-05.core/-main
+clj꞉chap-05.core꞉> (main)
+; Syntax error compiling at (.calva/output-window/output.calva-repl:246:20).
+; Unable to resolve symbol: main in this context
+clj꞉chap-05.core꞉>(-main)
+(prompt-rows)
+How many rows? [5]
+Sending interrupt.; Evaluation was interrupted
+clj꞉chap-05.core꞉> 
+; Execution error (InterruptedException) at java.util.concurrent.locks.AbstractQueuedSynchronizer$ConditionObject/await (AbstractQueuedSynchronizer.java:1638).
+; null
+clj꞉chap-05.core꞉> (prompt-rows)
+How many rows? [5]
+Here's your board:
+; Execution error (IllegalStateException) at chap-05.core/print-board (form-init13526142660910541341.clj:184).
+; Attempting to call unbound fn: #'chap-05.core/render-row
+clj꞉chap-05.core꞉> 
