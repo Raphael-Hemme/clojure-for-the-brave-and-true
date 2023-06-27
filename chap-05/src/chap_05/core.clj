@@ -158,8 +158,8 @@
   [board pos]
   (str (nth letters (dec pos))
        (if (get-in board [pos :pegged])
-         (colorize "0" :blue)
-         (colorize "-" :red))))
+         "0"
+         "-")))
 
 (defn row-positions
   "Return all positions in the given row"
@@ -274,5 +274,5 @@
 
 (defn -main
   "I don't do a whole lot ... yet."
-  [& args]
-  (println "Hello, World!"))
+  []
+  (prompt-rows))
