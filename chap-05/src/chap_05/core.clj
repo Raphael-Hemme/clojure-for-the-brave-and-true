@@ -5,25 +5,6 @@
 
 (declare successful-move prompt-move game-over prompt-rows)
 
-(def board-structure
-  {1 {:pegged true, :connections {6 3, 4 2}},
-   2 {:pegged true, :connections {9 5, 7 4}},
-   3 {:pegged true, :connections {10 6, 8 5}},
-   4 {:pegged true, :connections {13 8, 11 7, 6 5, 1 2}},
-   5 {:pegged true, :connections {14 9, 12 8}},
-   6 {:pegged true, :connections {15 10, 13 9, 4 5, 1 3}},
-   7 {:pegged true, :connections {9 8, 2 4}},
-   8 {:pegged true, :connections {10 9, 3 5}},
-   9 {:pegged true, :connections {7 8, 2 5}},
-   10 {:pegged true, :connections {8 9, 3 6}},
-   11 {:pegged true, :connections {13 12, 4 7}},
-   12 {:pegged true, :connections {14 13, 5 8}},
-   13 {:pegged true, :connections {15 14, 11 12, 6 9, 4 8}},
-   14 {:pegged true, :connections {12 13, 5 9}},
-   15 {:pegged true, :connections {13 14, 6 10}},
-   :rows 5
-   })
-
 (defn tri*
   "Generates a lazy sequence of triangular numbers"
   ([] (tri* 0 1))
@@ -49,10 +30,16 @@
   [pos]
   (inc (count (take-while #(> pos %) tri))))
 
+;; missing in book and copied from repo in attemt to fix script not working
+(defn in-bounds?
+  "Is every position less than or equal the max position?"
+  [max-pos & positions]
+  (= max-pos (apply max max-pos positions)))
+
 (defn connect
   "Form a mutual connection between two positions"
   [board max-pos pos neighbor destination]
-  (if (<= destination max-pos)
+  (if (in-bounds? max-pos neighbor destination)
     (reduce (fn [new-board [p1 p2]]
               (assoc-in new-board [p1 :connections p2] neighbor))
             board
@@ -85,8 +72,7 @@
   "Pegs the position and performs connections"
   [board max-pos pos]
   (let [pegged-board (assoc-in board [pos :pegged] true)]
-    (reduce (fn [new-board connection-creation-fn]
-              (connection-creation-fn new-board max-pos pos))
+    (reduce (fn [new-board connector] (connector new-board max-pos pos))
             pegged-board
             [connect-right connect-down-left connect-down-right])))
 
@@ -106,6 +92,21 @@
   [board pos]
   (get-in board [pos :pegged]))
 
+(defn valid-moves
+  "Return a map of all valid moves for pos, where the key is the destination 
+   and the value is the jumped position"
+  [board pos]
+           (into {}
+                 (filter (fn [[destination jumped]]
+                           (and (not (pegged? board destination))
+                                (pegged? board jumped)))
+                         (get-in board [pos :connections]))))
+
+(defn valid-move?
+  "Return jumped position if the move from p1 to p2 is valid, otherwise nil"
+  [board p1 p2]
+  (get (valid-moves board p1) p2))
+
 ;; Moving functions
 (defn remove-peg
   "Take the peg at a given position out of the board"
@@ -122,25 +123,12 @@
   [board p1 p2]
   (place-peg (remove-peg board p1) p2))
 
-(defn valid-moves
-  "Return a map of all valid moves for pos, where the ky is the destination and the value is the jumped position"
-  [board pos]
-  (into {}
-        (filter (fn [[destination jumped]]
-                  (and (not (pegged? board destination))
-                       (pegged? board jumped)))
-                (get-in board [pos :connections]))))
-
-(defn valid-move?
-  "Return jumped position if the move from p1 to p2 is valid, otherwise nil"
-  [board p1 p2]
-  (get (valid-moves board p1) p2))
-
 (defn make-move
   "Move peg from p1 to p2, removing the jumped peg"
   [board p1 p2]
   (if-let [jumped (valid-move? board p1 p2)]
-    (move-peg (remove-peg board jumped) p1 p2)))
+    (move-peg (remove-peg board jumped) p1 p2)
+    nil))
 
 (defn can-move?
   "Do any of the pegged positions have valid moves?"
@@ -174,13 +162,15 @@
   [board pos]
   (str (nth letters (dec pos))
        (if (get-in board [pos :pegged])
-         (colorize "0" :blue)
-         (colorize "-" :red))))
+         "0"
+         "-")))
 
 (defn row-positions
   "Return all positions in the given row"
   [row-num]
-  (range (inc (or (row-tri (dec row-num)) 0))))
+  (range (inc (or (row-tri (dec row-num)) 0))
+         ;; finally found the bug. Was missing the following expression
+         (inc (row-tri row-num))))
 
 (defn row-padding
   "String of spaces to add to the beginning of a row to center it"
@@ -191,8 +181,7 @@
 (defn render-row
   [board row-num]
   (str (row-padding row-num (:rows board))
-       (s/join " " (map (partial render-pos board)
-                                     (row-positions row-num)))))
+       (s/join " " (map (partial render-pos board) (row-positions row-num)))))
 
 (defn print-board
   [board]
@@ -216,11 +205,17 @@
        (s/lower-case input)))))
 
 
+;; (defn characters-as-strings
+;;   "The function missing in the book... Takes a simple string, removes spaces 
+;;    then returns a list of the individual characters"
+;;   [input-str] 
+;;   (apply list (s/split (s/replace input-str " " "") #"")))
+
 (defn characters-as-strings
-  "The function missing in the book... Takes a simple string, removes spaces 
-   then returns a list of the individual characters"
-  [input-str] 
-  (apply list (s/split (s/replace input-str " " "") #"")))
+  "Given a string, return a collection consisting of each individual
+  character"
+  [string]
+  (re-seq #"[a-zA-Z]" string))
 
 
 (defn prompt-empty-peg
@@ -277,16 +272,6 @@
     (if-let [new-board (make-move board (first input) (second input))]
       (user-entered-valid-move new-board)
       (user-entered-invalid-move board))))
-
-
-
-
-;; trying it out - fixed now.
-(def my-board (assoc-in (new-board 5) [4 :pegged] false))
-
-(println my-board)
-
-(valid-moves my-board 5)
 
 (defn -main
   []
